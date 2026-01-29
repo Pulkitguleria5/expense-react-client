@@ -2,7 +2,7 @@ function Student() {
     let name = "Student Page";
 
     return (
-    
+
         <div>
             <h1>page name : {name}</h1>
         </div>
