@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function Login() {
+function Login(props) {
 
     const [formData, setFormData] = useState({
         email: '',
@@ -53,7 +53,8 @@ function Login() {
 
 
                 const res = await axios.post('http://localhost:5001/auth/login', body, config);
-                console.log('Login successful:', res.data);
+                // console.log('Login successful:', res.data);
+                props.setUserdetails(res.data.user);
                 alert('Login successful!');
                 setMessage('Login successful!');
             } catch (error) {
