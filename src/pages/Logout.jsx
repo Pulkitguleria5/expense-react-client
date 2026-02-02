@@ -10,18 +10,20 @@ import { useEffect } from "react";
 import axios from "axios";
 
 function Logout(props) {
+  const { setUserdetails } = props;
 
+  useEffect(() => {
     const logout = async () => {
       try {
-        await axios.post("http://localhost:5001/auth/logout",{},{ withCredentials: true });
+        await axios.post("http://localhost:5001/auth/logout", {}, { withCredentials: true });
       } catch (error) {
         console.log(error);
       }
-      props.setUser(null);
+      setUserdetails(null);
     };
-  useEffect(() => {
-           logout();
-  }, []);
+
+    logout();
+  }, [setUserdetails]);
 
   return null;
 }

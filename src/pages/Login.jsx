@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 function Login(props) {
 
     const [formData, setFormData] = useState({
-        email: '',
-        password: ''
+        email: "",
+        password: ""
     });
 
     const [errors, setErrors] = useState({});
@@ -73,33 +74,74 @@ function Login(props) {
 
 
 
+
+    }
+
+    const handleGoogleSuccess = async (authresponse) => {
+        try {
+            const id_token = authresponse?.credential;
+
+            const body = { idtoken: id_token };
+            const config = { withCredentials: true };
+            const res = await axios.post('http://localhost:5001/auth//google-auth', body, config);
+            props.setUserdetails(res.data.user);
+            alert('Google Login successful!');
+            setMessage('Google Login successful!');
+
+
+        }
+        catch (error) {
+            console.error('Google Login failed:', error);
+            setErrors((prev) => ({ ...prev, message: 'Google Login failed. Please try again.' }));
+            alert('Google Login failed. Please try again.');
+        }}
+
+        const handleGoogleFailure = (error) => {
+            console.log('Google Login Failed:', error);
+            setErrors((prev) => ({ ...prev, message: 'Google Login failed. Please try again.' }));
+
+        }
+
+
+        return (
+            <div className="container text-center">
+                <h2 className="text-center">Login Page</h2>
+                {message && <p className="text-green-500">{message}</p>}
+                {errors.message && <p className="text-red-500">{errors.message}</p>}
+                <form onSubmit={handleSubmit} >
+                    <div className="mb-3">
+                        <label>Email:</label>
+                        <input type="email" className="w-full border rounded px-3 py-2" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
+                        {errors.email && <span className="text-red-500">{errors.email}</span>}
+                    </div>
+
+                    <div className="mb-3">
+                        <label>Password:</label>
+                        <input type="password" className="w-full border rounded px-3 py-2" placeholder="Enter password" name="password" value={formData.password} onChange={handleChange} />
+                        {errors.password && <span className="text-red-500">{errors.password}</span>}
+                    </div>
+
+                    <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
+                </form>
+
+
+                <div className="mt-4">
+                    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={handleGoogleFailure}
+                        />
+                    </GoogleOAuthProvider>
+                </div>
+            </div>
+
+
+
+
+
+        );
     }
 
 
 
-    return (
-        <div className="container text-center">
-            <h2 className="text-center">Login Page</h2>
-            {message && <p className="text-green-500">{message}</p>}
-            {errors.message && <p className="text-red-500">{errors.message}</p>}
-            <form onSubmit={handleSubmit} >
-                <div className="mb-3">
-                    <label>Email:</label>
-                    <input type="email" className="w-full border rounded px-3 py-2" placeholder="Enter email" name="email" value={formData.email} onChange={handleChange} />
-                    {errors.email && <span className="text-red-500">{errors.email}</span>}
-                </div>
-
-                <div className="mb-3">
-                    <label>Password:</label>
-                    <input type="password" className="w-full border rounded px-3 py-2" placeholder="Enter password" name="password" value={formData.password} onChange={handleChange} />
-                    {errors.password && <span className="text-red-500">{errors.password}</span>}
-                </div>
-
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
-            </form>
-        </div>
-    );
-
-}
-
-export default Login;
+    export default Login;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function StudentList1() {
     const [visible, setVisible] = useState(true);

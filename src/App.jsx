@@ -12,6 +12,7 @@ import axios from 'axios';
 function App() {
 
   const [userdetails, setUserdetails] = useState(null);
+  const[loading, setLoading] = useState(true);
 
   const isuserLoggedIn = async () => {
     try {
@@ -21,6 +22,8 @@ function App() {
     } catch (error) {
       setUserdetails(null);
       console.log(error);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -28,7 +31,11 @@ function App() {
     isuserLoggedIn();
   }, []);
 
-
+if (loading) {
+  <div className="flex justify-center items-center h-screen">
+    <h2 className="text-2xl font-bold">Loading...</h2>
+  </div>
+}
   
   
   return (
