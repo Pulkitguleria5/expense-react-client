@@ -6,7 +6,7 @@ export default function AppLayout({ children }) {
     return (
         <div>
             <Header />
-            <Navbar />
+            {/* <Navbar /> */}
                 {children}
             
             <Footer />

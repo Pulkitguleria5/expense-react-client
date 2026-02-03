@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { serverEndpoint } from '../config/appConfig';
+import {useSelector,useDispatch} from 'react-redux';
+import { setUser } from '../redux/user/userSlice';
 
-function Login(props) {
+function Login() {
+
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
         email: "",
@@ -53,9 +58,11 @@ function Login(props) {
                 const config = { withCredentials: true };
 
 
-                const res = await axios.post('http://localhost:5001/auth/login', body, config);
+                const res = await axios.post(`${serverEndpoint}/auth/login`, body, config);
                 // console.log('Login successful:', res.data);
-                props.setUserdetails(res.data.user);
+                // props.setUserdetails(res.data.user);
+                dispatch(setUser(res.data.user));
+
                 alert('Login successful!');
                 setMessage('Login successful!');
             } catch (error) {
@@ -79,12 +86,15 @@ function Login(props) {
 
     const handleGoogleSuccess = async (authresponse) => {
         try {
-            const id_token = authresponse?.credential;
+            const idToken = authresponse?.credential;
+            // console.log('idToken:', idToken);
 
-            const body = { idtoken: id_token };
+            // Backend expects `idToken` in the body
+            const body = { idToken };
             const config = { withCredentials: true };
-            const res = await axios.post('http://localhost:5001/auth//google-auth', body, config);
-            props.setUserdetails(res.data.user);
+            const res = await axios.post(`${serverEndpoint}/auth/google-auth`, body, config);
+            // props.setUserdetails(res.data.user);
+            dispatch(setUser(res.data.user));
             alert('Google Login successful!');
             setMessage('Google Login successful!');
 
@@ -92,13 +102,13 @@ function Login(props) {
         }
         catch (error) {
             console.error('Google Login failed:', error);
-            setErrors((prev) => ({ ...prev, message: 'Google Login failed. Please try again.' }));
+            setErrors((prev) => ({ ...prev, message: 'Google Login failed1. Please try again.' }));
             alert('Google Login failed. Please try again.');
         }}
 
         const handleGoogleFailure = (error) => {
             console.log('Google Login Failed:', error);
-            setErrors((prev) => ({ ...prev, message: 'Google Login failed. Please try again.' }));
+            setErrors((prev) => ({ ...prev, message: 'Google Login failed2. Please try again.' }));
 
         }
 
@@ -117,7 +127,15 @@ function Login(props) {
 
                     <div className="mb-3">
                         <label>Password:</label>
-                        <input type="password" className="w-full border rounded px-3 py-2" placeholder="Enter password" name="password" value={formData.password} onChange={handleChange} />
+                        <input
+                            type="password"
+                            className="w-full border rounded px-3 py-2"
+                            placeholder="Enter password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            autoComplete="current-password"
+                        />
                         {errors.password && <span className="text-red-500">{errors.password}</span>}
                     </div>
 

@@ -1,8 +1,8 @@
 function Footer() {
     return (
-        <div className="container">
+        <div className="w-full bg-gray-100 text-center py-4">
             
-            This is Footer
+            ALL RIGHTS RESERVED &copy; 2024 Expense Tracker
         </div>
     );
 }   

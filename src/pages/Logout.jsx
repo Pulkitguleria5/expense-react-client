@@ -5,21 +5,25 @@
 // }
 
 
-
+import { serverEndpoint } from "../config/appConfig";
 import { useEffect } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../redux/user/userSlice";
 
-function Logout(props) {
-  const { setUserdetails } = props;
+function Logout() {
+  // const { setUserdetails } = props;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const logout = async () => {
       try {
-        await axios.post("http://localhost:5001/auth/logout", {}, { withCredentials: true });
+        await axios.post(`${serverEndpoint}/auth/logout`, {}, { withCredentials: true });
+        // setUserdetails(null);
+        dispatch(clearUser());
       } catch (error) {
         console.log(error);
       }
-      setUserdetails(null);
     };
 
     logout();
