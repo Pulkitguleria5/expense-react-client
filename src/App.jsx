@@ -11,6 +11,8 @@ import axios from 'axios';
 import { serverEndpoint } from './config/appConfig.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from './redux/user/userSlice.js';
+import Groups from './pages/Groups.jsx';    
+
 
 function App() {
 
@@ -80,6 +82,15 @@ function App() {
         <Route path='/logout' element={
           userdetails ?
             (<Logout />) :
+            (<Navigate to="/login" />)
+        } />
+
+
+        <Route path='/groups' element={
+          userdetails ?
+            (<UserLayout >
+              <Groups />
+            </UserLayout>) :
             (<Navigate to="/login" />)
         } />
 

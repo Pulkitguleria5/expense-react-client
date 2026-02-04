@@ -1,10 +1,9 @@
 function Footer() {
-    return (
-        <div className="w-full bg-gray-100 text-center py-4">
-            
-            ALL RIGHTS RESERVED &copy; 2024 Expense Tracker
-        </div>
-    );
-}   
+  return (
+    <footer className="bg-gray-100 text-center py-4 text-gray-600">
+      All rights reserved.
+    </footer>
+  );
+}
 
 export default Footer;
