@@ -1,14 +1,14 @@
-import UserHeader from "./UserHeader";
 import UserFooter from "./UserFooter";
+import UserHeader from "./UserHeader";
 
-export default function UserLayout({children}) {
-
+function UserLayout({ children }) {
     return (
-        <div>
-            <UserHeader/>
+        <>
+            <UserHeader />
             {children}
             <UserFooter />
-
-        </div>
+        </>
     );
 }
+
+export default UserLayout;

@@ -1,38 +1,31 @@
-// export default function Logout(props) {
-//     // Clear user details on logout
-//     props.setUserdetails(null);
-    
-// }
-
-
-import { serverEndpoint } from "../config/appConfig";
-import { useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { clearUser } from "../redux/user/userSlice";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { serverEndpoint } from "../config/appConfig";
+import { useDispatch } from 'react-redux';
+import { CLEAR_USER } from "../redux/user/action";
 
 function Logout() {
-  // const { setUserdetails } = props;
-  const dispatch = useDispatch();
-  const userdetails = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    const logout = async () => {
-      try {
-        await axios.post(`${serverEndpoint}/auth/logout`, {}, { withCredentials: true });
-        // setUserdetails(null);
-        dispatch(clearUser());
-      } catch (error) {
-        console.log(error);
-      }
+    const handleLogout = async () => {
+        try {
+            await axios.post(`${serverEndpoint}/auth/logout`, 
+                {}, 
+                { withCredentials: true }
+            );
+            document.cookie = `jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            // setUser(null);
+            dispatch({
+                type: CLEAR_USER
+            });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    logout();
-  }, [userdetails]);
-
-  return null;
+    useEffect(() => {
+        handleLogout();
+    }, []);
 }
 
 export default Logout;
-

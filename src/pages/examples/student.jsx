@@ -1,20 +1,24 @@
+/**
+ * JSX is the combination of HTML, CSS, and Javascript code.
+ * Its an extension created by React.
+ * 
+ * Every compoment must return single parent node which
+ * will be rendered.
+ * 
+ */
 function Student() {
-    let name = "Student Page";
+    let name = "Tommy";
+    let rollNumber = 10;
 
     return (
-
-        <div>
-            <h1>page name : {name}</h1>
-        </div>
-
+        <>
+            <p>
+                Student Name: {name}
+                <br/>
+                Roll Number: {rollNumber}
+            </p>
+        </>
     );
 }
 
 export default Student;
-
-
-
-
-
-
-// jsx is combination of js and html and css

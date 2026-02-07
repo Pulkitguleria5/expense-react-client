@@ -1,23 +1,19 @@
-import Student2 from "./student2";
+import Student3 from "./Student3";
 
-export default function StudentList(props) {
-   const filteredStudents = props.students.filter(student => student.percentage >= 33);
-
+function StudentList({ students }) {
     return (
-        <div>
-            <h1>Student List Component</h1>
-            {filteredStudents.map((student, index) => (
-                
-                    <Student2
-                        key={index}
-                        name={student.name}
-                        age={student.age}
-                        percentage={student.percentage}
-                    />
-                
+        <>
+            <h2>Student List</h2>
+            {students.map((student, index) => (
+                <Student3 
+                    key={index}
+                    name={student.name} 
+                    rollNumber={student.rollNumber} 
+                    percentage={student.percentage}
+                />
             ))}
-        </div>
+        </>
     );
 }
 
-
+export default StudentList;

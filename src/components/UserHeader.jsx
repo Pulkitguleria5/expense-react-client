@@ -1,93 +1,129 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 function UserHeader() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+    const user = useSelector((state) => state.userDetails);
+    const location = useLocation();
+    const [navOpen, setNavOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
-  const userdetails = useSelector((state) => state.user);
+    // Helper to set active class
+    const isActive = (path) =>
+        location.pathname === path
+            ? "font-bold text-blue-600"
+            : "text-slate-500";
 
-  return (
-    <nav className="w-full bg-gray-900 text-white border-b border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center relative">
-
-        {/* Brand */}
-        <Link to="/dashboard" className="text-lg font-semibold">
-          Dashboard
-        </Link>
-
-        {/* Mobile Toggle */}
-        <button
-          className="ml-auto lg:hidden text-2xl"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </button>
-
-        {/* Desktop Links */}
-        <div className="hidden lg:flex ml-auto items-center gap-6">
-          <Link
-            to="/groups"
-            className="text-sm font-medium hover:text-gray-300"
-          >
-            Groups
-          </Link>
-
-          {/* Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="font-medium"
-            >
-              {userdetails?.name || "Account"}
-            </button>
-
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 bg-white text-black rounded shadow min-w-[140px]">
+    return (
+        <nav className="bg-white sticky top-0 border-b shadow-sm py-2">
+            <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
+                {/* Brand Logo */}
                 <Link
-                  to="/logout"
-                  className="block px-4 py-2 hover:bg-gray-100"
+                    className="flex items-center font-bold text-2xl"
+                    to="/dashboard"
                 >
-                  Logout
+                    <span className="text-blue-600">Merge</span>Money
                 </Link>
-              </div>
-            )}
-          </div>
-        </div>
 
-        {/* Mobile Menu */}
-        <div
-          className={`
-            ${menuOpen ? "block" : "hidden"}
-            absolute top-16 left-0 w-full bg-gray-900
-            lg:hidden
-          `}
-        >
-          <div className="flex flex-col gap-4 p-4">
-            <Link to="/groups">Groups</Link>
+                <button
+                    className="inline-flex items-center justify-center rounded-md border border-transparent p-2 text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 lg:hidden"
+                    type="button"
+                    aria-controls="userNavbar"
+                    aria-expanded={navOpen}
+                    onClick={() => setNavOpen(!navOpen)}
+                >
+                    <span className="relative block h-0.5 w-6 bg-current before:absolute before:-top-2 before:block before:h-0.5 before:w-6 before:bg-current after:absolute after:top-2 after:block after:h-0.5 after:w-6 after:bg-current" />
+                </button>
 
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="text-left"
-            >
-              {userdetails?.name || "Account"}
-            </button>
+                <div
+                    className={`${navOpen ? "block" : "hidden"} w-full lg:flex lg:items-center lg:justify-between`}
+                    id="userNavbar"
+                >
+                    {/* Primary App Navigation */}
+                    <ul className="flex flex-col lg:flex-row lg:items-center lg:space-x-4 mr-auto mb-2 lg:mb-0 lg:ml-4 gap-2">
+                        {/* <li className="nav-item">
+                            <Link
+                                className={`nav-link px-3 ${isActive(
+                                    "/dashboard"
+                                )}`}
+                                to="/dashboard"
+                            >
+                                <i className="mr-1">⏱</i>{" "}
+                                Groups
+                            </Link>
+                        </li> */}
+                    </ul>
 
-            {dropdownOpen && (
-              <Link
-                to="/logout"
-                className="pl-2 text-sm text-gray-300"
-              >
-                Logout
-              </Link>
-            )}
-          </div>
-        </div>
+                    {/* User Profile Dropdown */}
+                    <ul className="flex items-center space-x-3 ml-auto">
+                        <li className="relative dropdown">
+                            <Link
+                                className="flex items-center rounded-full bg-slate-100 px-3 py-1 border border-slate-200 text-slate-700"
+                                to="#"
+                                role="button"
+                                aria-expanded={menuOpen}
+                                onClick={() => setMenuOpen(!menuOpen)}
+                            >
+                                <div
+                                    className="rounded-full bg-blue-600 text-white flex items-center justify-center mr-2 shadow-sm"
+                                    style={{
+                                        width: "28px",
+                                        height: "28px",
+                                        fontSize: "12px",
+                                    }}
+                                >
+                                    {user?.name
+                                        ? user.name.charAt(0).toUpperCase()
+                                        : "U"}
+                                </div>
+                                <span className="text-slate-900 font-medium text-sm">
+                                    {user ? user.name : "Account"}
+                                </span>
+                            </Link>
+                            <ul
+                                className={`${menuOpen ? "block" : "hidden"} absolute right-0 mt-2 rounded-xl bg-white shadow-lg border border-slate-100`}
+                            >
+                                <li
+                                    className="px-3 py-2 border-b border-slate-100 mb-1"
+                                    style={{ minWidth: "200px" }}
+                                >
+                                    <p className="mb-0 text-sm font-bold text-slate-900">
+                                        Signed in as
+                                    </p>
+                                    <p className="mb-0 text-sm text-slate-500">
+                                        {user?.email}
+                                    </p>
+                                </li>
 
-      </div>
-    </nav>
-  );
+
+                               <li>
+                                    <Link
+                                        className= "block px-4 py-2 text-slate-700 font-medium hover:bg-slate-50"
+                                        to="/manage-users"
+                                    >
+                                        <i className="mr-2">👥</i>{" "}
+                                         Manage Users
+                                    </Link>
+                                </li>
+                                <hr className="my-1 border-t border-slate-100" />
+
+
+                                <li>
+                                    <Link
+                                        className="block px-4 py-2 text-red-600 font-medium hover:bg-red-50"
+                                        to="/logout"
+                                    >
+                                        <i className="mr-2">↩</i>{" "}
+                                        Sign Out
+                                    </Link>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    );
 }
 
 export default UserHeader;

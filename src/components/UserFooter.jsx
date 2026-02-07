@@ -1,7 +1,9 @@
-export default function Footer() {
+function Footer() {
     return (
-        <div className="w-full bg-gray-100 text-center py-4">
-            <p>© 2024 Expense Tracker. All rights reserved.</p>
+        <div className="w-full bg-slate-100 text-center py-3 text-slate-700">
+            All rights reserved.
         </div>
     );
 }
+
+export default Footer;

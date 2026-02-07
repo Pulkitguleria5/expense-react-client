@@ -1,11 +1,14 @@
-export default function Student1(props) {
-  return (
-    <div>
-      <h1>page name : {props.name}</h1>
-    </div>
-  );
+function Student1({ name = 'Tommy', rollNumber = 10 }) {
+    
+    return (
+        <>
+            <p>
+                Student Name: {name}
+                <br/>
+                Roll Number: {rollNumber}
+            </p>
+        </>
+    );
 }
 
-
-
-
+export default Student1;

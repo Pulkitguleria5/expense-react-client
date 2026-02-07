@@ -1,16 +1,14 @@
-import Header from "./Header";
 import Footer from "./Footer";
+import Header from "./Header";
 
 function AppLayout({ children }) {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow">
-        {children}
-      </main>
-      <Footer />
-    </div>
-  );
+    return (
+        <>
+            <Header />
+            {children}
+            <Footer/>
+        </>
+    );
 }
 
 export default AppLayout;

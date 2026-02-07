@@ -1,15 +1,15 @@
-import { useSelector } from "react-redux";
-export default function Dashboard(s) {
-    const userdetails = useSelector((state) => state.user);
+import { useSelector } from 'react-redux';
+
+function Dashboard() {
+    const user = useSelector((state) => state.userDetails);
+
     return (
-        <div>
-            <h2>Welcome to the Dashboard</h2>
-            <p>User Details: {userdetails?.name}</p>
-
+        <div className="max-w-4xl mx-auto px-4 text-center">
+            <h4 className="text-2xl font-semibold text-slate-900">
+                Welcome, {user.name}!
+            </h4>
         </div>
-
-
-
     );
-
 }
+
+export default Dashboard;

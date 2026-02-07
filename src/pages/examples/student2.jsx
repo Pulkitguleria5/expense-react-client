@@ -1,15 +1,16 @@
-export default function Student3(props) {
-    const {name,age,percentage}=props;
+// Without destructuring, you need to manually take out
+// values to render.
+function Student2(props) {
+    
     return (
-     <div>
-        { percentage >= 88 && (
-            <div>
-                <span>name : {name}</span>
-                
-                <span>age : {age}</span>
-                <span>percentage : {percentage}</span>
-            </div>
-        )}
-    </div>
+        <>
+            <p>
+                Student Name: {props.name}
+                <br/>
+                Roll Number: {props.rollNumber}
+            </p>
+        </>
     );
 }
+
+export default Student2;
