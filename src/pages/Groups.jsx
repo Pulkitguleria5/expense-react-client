@@ -9,15 +9,20 @@ function Groups() {
     const [groups, setGroups] = useState([]);
     const [loading, setLoading] = useState(true);
     const [show, setShow] = useState(false);
-        const permissions = usePermissions();                                 
+    const permissions = usePermissions();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [limit, setLimit] = useState(3); // Number of groups per page                     
 
-    const fetchGroups = async () => {
+    const fetchGroups = async (page = 1) => {
         try {
             const response = await axios.get(
-                `${serverEndpoint}/groups/my-groups`,
+                `${serverEndpoint}/groups/my-groups?page=${page}&limit=${limit}`,
                 { withCredentials: true }
             );
-            setGroups(response.data);
+            setGroups(response?.data?.groups);
+            setTotalPages(response?.data?.pagination?.totalPages);
+            setCurrentPage(response?.data?.pagination?.currentPage);
         } catch (error) {
             console.log(error);
         } finally {
@@ -26,21 +31,21 @@ function Groups() {
     };
 
     const handleGroupUpdateSuccess = (data) => {
-        setGroups((prevGroups) => {
-            const exists = prevGroups.some((group) => group._id === data._id);
-            if (exists) {
-                return prevGroups.map((group) =>
-                    group._id === data._id ? data : group
-                );
-            } else {
-                return [data, ...prevGroups];
-            }
-        });
+        fetch(currentPage); // Refetch groups to get the latest data after update
     };
 
     useEffect(() => {
-        fetchGroups();
-    }, []);
+        fetchGroups(currentPage);
+    }, [currentPage]);
+
+
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
+    }
+
+
 
     if (loading) {
         return (
@@ -74,15 +79,15 @@ function Groups() {
                     </p>
                 </div>
                 {permissions.canCreateGroups && (
-                <div className="w-full md:w-1/3 text-center md:text-right">
-                    <button
-                        className="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 font-bold text-white shadow-sm hover:bg-blue-700"
-                        onClick={() => setShow(true)}
-                    >
-                        <i className="mr-2 text-lg font-bold">+</i>
-                        New Group
-                    </button>
-                </div>
+                    <div className="w-full md:w-1/3 text-center md:text-right">
+                        <button
+                            className="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 font-bold text-white shadow-sm hover:bg-blue-700"
+                            onClick={() => setShow(true)}
+                        >
+                            <i className="mr-2 text-lg font-bold">+</i>
+                            New Group
+                        </button>
+                    </div>
                 )}
             </div>
 
@@ -127,6 +132,55 @@ function Groups() {
                     ))}
                 </div>
             )}
+
+            {totalPages > 1 && (
+                <>
+                    <nav className="flex justify-center items-center mt-6">
+                        <button
+                            className={`mx-1 px-3 py-1 rounded-md ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </button>
+                        {[...Array(totalPages)].map((num, index) => (         // it gives a array of length totalPages with no values, so we can use index to get the page number   
+                            <button
+                                key={index + 1}
+                                className={`mx-1 px-3 py-1 rounded-md ${currentPage === index + 1 ? 'bg-blue-700 text-white' : 'bg-blue-300 text-white hover:bg-blue-700'}`}
+                                onClick={() => handlePageChange(index + 1)}
+                            >
+                                {index + 1}
+                            </button>
+                        )
+
+                        )}
+                        <button
+                            className={`mx-1 px-3 py-1 rounded-md ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                        >
+                            Next
+                        </button>
+                    </nav>
+
+
+                    <footer className="flex justify-center items-center mt-4">
+                        <select
+                            className="ml-4 px-3 py-1 rounded-md border border-gray-300"
+                            value={limit}
+                            onChange={(e) => setLimit(parseInt(e.target.value))}
+                        >
+                            <option value={3}>3</option>
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                        </select>
+                    </footer>
+                </>
+
+
+            )}
+
+
 
             <CreateGroupModal
                 show={show}
