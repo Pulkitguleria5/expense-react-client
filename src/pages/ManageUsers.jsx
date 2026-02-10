@@ -21,7 +21,7 @@ function ManageUsers() {
       const response = await axios.get(`${serverEndpoint}/users/`, {
         withCredentials: true,
       });
-      setUsers(response.data.users);
+      setUsers(response.data.users || []);
     } catch (error) {
       setErrors({ message: "Unable to fetch users, please try again" });
     } finally {
@@ -103,7 +103,7 @@ function ManageUsers() {
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Add User Form */}
-        <Can requiredPermission="canCreateUsers"/>
+        <Can requiredPermission="canCreateUsers">
         <div className="md:col-span-3">
           <div className="bg-white shadow rounded-lg">
             <div className="border-b px-4 py-3 font-semibold">
@@ -171,7 +171,7 @@ function ManageUsers() {
             </form>
           </div>
         </div>
-
+</Can>
         {/* Users Table */}
         <div className="md:col-span-9">
           <div className="bg-white shadow rounded-lg overflow-hidden">
