@@ -14,12 +14,12 @@ function Groups() {
     const [totalPages, setTotalPages] = useState(1);
     const [limit, setLimit] = useState(3); // Number of groups per page        
     const [sortBy, setSortBy] = useState('newest'); // Sorting option    
-    const [nameSort, setNameSort] = useState('asc'); // Name sorting option    
+    // const [nameSort, setNameSort] = useState(''); // Name sorting option    
 
     const fetchGroups = async (page = 1) => {
         try {
             const response = await axios.get(
-                `${serverEndpoint}/groups/my-groups?page=${page}&limit=${limit}&sortBy=${sortBy}&nameSort=${nameSort}`,
+                `${serverEndpoint}/groups/my-groups?page=${page}&limit=${limit}&sortBy=${sortBy}`,
                 { withCredentials: true }
             );
             setGroups(response?.data?.groups);
@@ -85,42 +85,48 @@ function Groups() {
                 {permissions.canCreateGroups && (
                     <>
                         <div className="w-full md:w-1/3 text-left md:text-center">
-                        <label>Sort:</label>
-                        <select
-                            className="ml-2 px-3 py-1 rounded-md border border-gray-300"
-                            value={sortBy}
-                            onChange={(e) =>{ setSortBy(e.target.value);
-                            setCurrentPage(1); // Reset to first page when sorting changes
-                            }}
-                        >
-                            <option value="newest">Newest</option>
-                            <option value="oldest">Oldest</option>
-                        </select>
-                    </div>
+                            <label>Sort:</label>
+                            <select
+                                className="ml-2 px-3 py-1 rounded-md border border-gray-300"
+                                value={sortBy}
+                                onChange={(e) => {
+                                    setSortBy(e.target.value);
+                                    // setNameSort(''); // Reset name sort
+                                    setCurrentPage(1); // Reset to first page when sorting changes
+                                }}
+                            >
+                                <option value="" disabled>Select Date Sort</option>
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                            </select>
+                        </div>
 
-                    <div className="w-full md:w-1/3 text-left md:text-center">
-                        <label>Name Sort:</label>
-                        <select
-                            className="ml-2 px-3 py-1 rounded-md border border-gray-300"
-                            value={nameSort}
-                            onChange={(e) =>{ setNameSort(e.target.value);
-                            setCurrentPage(1); // Reset to first page when sorting changes
-                            }}
-                        >
-                            <option value="asc">A-Z</option>
-                            <option value="desc">Z-A</option>
-                        </select>
-                    </div>
-                
-                    <div className="w-full md:w-1/3 text-center md:text-right">
-                        <button
-                            className="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 font-bold text-white shadow-sm hover:bg-blue-700"
-                            onClick={() => setShow(true)}
-                        >
-                            <i className="mr-2 text-lg font-bold">+</i>
-                            New Group
-                        </button>
-                    </div>
+                        <div className=" flex items-center w-full md:w-1/3 text-left md:text-center">
+                            <label>Name Sort:</label>
+                            <select
+                                className="ml-2 px-3 py-1 rounded-md border border-gray-300"
+                                value={sortBy}
+                                onChange={(e) => {
+                                    // setNameSort(e.target.value);
+                                    setSortBy(e.target.value); // Reset date sort
+                                    setCurrentPage(1); // Reset to first page when sorting changes
+                                }}
+                            >
+                                <option value="" disabled>Name Sort</option>
+                                <option value="asc">A-Z</option>
+                                <option value="desc">Z-A</option>
+                            </select>
+                        </div>
+
+                        <div className="w-full md:w-1/3 text-center md:text-right">
+                            <button
+                                className="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 font-bold text-white shadow-sm hover:bg-blue-700"
+                                onClick={() => setShow(true)}
+                            >
+                                <i className="mr-2 text-lg font-bold">+</i>
+                                New Group
+                            </button>
+                        </div>
                     </>
                 )}
             </div>

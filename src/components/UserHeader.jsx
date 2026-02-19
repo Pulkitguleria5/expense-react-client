@@ -96,15 +96,47 @@ function UserHeader() {
                                 </li>
 
 
-                               <li>
+                                <li>
                                     <Link
-                                        className= "block px-4 py-2 text-slate-700 font-medium hover:bg-slate-50"
+                                        className="block px-4 py-2 text-slate-700 font-medium hover:bg-slate-50"
                                         to="/manage-users"
                                     >
                                         <i className="mr-2">👥</i>{" "}
-                                         Manage Users
+                                        Manage Users
                                     </Link>
                                 </li>
+
+                                <li>
+                                    <Link
+                                        to="/manage-payments"
+                                        className="block px-4 py-2 text-slate-700 font-medium hover:bg-slate-50"
+                                    >
+                                        <span className="mr-2 text-green-600">
+                                            ✔
+                                        </span>
+                                        <span className="text-sm">
+                                        manage payments
+                                        </span>
+
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="/manage-subscription"
+                                        className="block px-4 py-2 text-slate-700 font-medium hover:bg-slate-50"
+                                    >
+                                        <span className="mr-2 text-green-600">
+                                            ✔
+                                        </span>
+
+                                        <span className="text-sm">
+                                        manage subscription
+                                        </span>
+                                    </Link>
+                                </li>
+
+
+
                                 <hr className="my-1 border-t border-slate-100" />
 
 

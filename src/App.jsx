@@ -15,6 +15,9 @@ import GroupExpenses from "./pages/GroupExpenses";
 import ManageUsers from "./pages/ManageUsers";
 import ProtectedRoute from "./rbac/ProtectedRoute";
 import UnauthorizedAccess from "./components/errors/UnauthorizedAccess";
+import ManagePayments from "./pages/ManagePayments";
+import ManageSubscription from "./pages/ManageSubscription";
+
 
 
 function App() {
@@ -114,41 +117,72 @@ function App() {
             />
 
             <Route
-            path="/manage-users"
-            element = {
-                userDetails?
-                ( <ProtectedRoute roles={["admin"]}>
-                    <UserLayout>
-                        <ManageUsers />
-                    </UserLayout>
-                </ProtectedRoute>)
-                :
-                (<Navigate to="/login" />)
+                path="/manage-users"
+                element={
+                    userDetails ?
+                        (<ProtectedRoute roles={["admin"]}>
+                            <UserLayout>
+                                <ManageUsers />
+                            </UserLayout>
+                        </ProtectedRoute>)
+                        :
+                        (<Navigate to="/login" />)
 
-            }
+                }
             />
 
             <Route
                 path="/logout"
                 element={userDetails ? <Logout /> : <Navigate to="/login" />}
             />
-        
 
 
-          <Route 
-          path="/unauthorized-access" 
-          element={
-            userDetails ? (
-              <UserLayout>
-                <UnauthorizedAccess />
-              </UserLayout>
-            ) : (
-                <AppLayout>
-                  <UnauthorizedAccess />
-                </AppLayout>
-            )
-          } 
-        />  
+
+            <Route
+                path="/unauthorized-access"
+                element={
+                    userDetails ? (
+                        <UserLayout>
+                            <UnauthorizedAccess />
+                        </UserLayout>
+                    ) : (
+                        <AppLayout>
+                            <UnauthorizedAccess />
+                        </AppLayout>
+                    )
+                }
+            />
+
+
+            <Route
+                path="/manage-payments"
+                element={
+                    userDetails ? (
+                        <ProtectedRoute roles={["admin"]}>
+                            <UserLayout>
+                                <ManagePayments />
+                            </UserLayout>
+                        </ProtectedRoute>
+                    ) : (
+                        <Navigate to="/login" />
+                    )
+                }
+            />
+            <Route
+                path="/manage-subscription"
+                element={
+                    userDetails ? (
+                        <ProtectedRoute roles={["admin"]}>
+                            <UserLayout>
+                                <ManageSubscription />
+                            </UserLayout>
+                        </ProtectedRoute>
+                    ) : (
+                        <Navigate to="/login" />
+                    )
+                }
+            />
+
         </Routes>
 
     );
